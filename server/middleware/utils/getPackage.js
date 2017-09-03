@@ -7,9 +7,11 @@ const mkdirp = require("mkdirp")
 const tar = require("tar-fs")
 const createMutex = require("./createMutex")
 
+const PackageCacheDir = process.env.NPM_PACKAGE_CACHE_DIR || tmpdir()
+
 function createTempPath(name, version) {
   const normalName = name.replace(/\//g, "-")
-  return path.join(tmpdir(), `unpkg-${normalName}-${version}`)
+  return path.join(PackageCacheDir, `unpkg-${normalName}-${version}`)
 }
 
 function stripNamePrefix(headers) {

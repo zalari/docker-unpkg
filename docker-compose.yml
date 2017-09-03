@@ -1,0 +1,34 @@
+version: "3"
+
+networks:
+  webnet:
+
+volumes:
+  webvol:
+
+services:
+
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    networks:
+      - webnet
+    volumes:
+      - webvol:/var/lib/npm
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+
+  cache:
+    image: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - webnet
+    volumes:
+      - ./data:/data
+    deploy:
+      placement:
+        constraints: [node.role == manager]
