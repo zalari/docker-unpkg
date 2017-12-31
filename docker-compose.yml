@@ -16,10 +16,6 @@ services:
       - webnet
     volumes:
       - webvol:/var/lib/npm
-    deploy:
-      replicas: 3
-      restart_policy:
-        condition: on-failure
 
   cache:
     image: redis
@@ -29,6 +25,3 @@ services:
       - webnet
     volumes:
       - ./data:/data
-    deploy:
-      placement:
-        constraints: [node.role == manager]
