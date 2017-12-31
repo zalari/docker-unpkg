@@ -1,34 +1,20 @@
 version: "3"
-
-networks:
-  webnet:
-
-volumes:
-  webvol:
-
 services:
-
   web:
-    build: .
-    ports:
-      - "5000:5000"
-    networks:
-      - webnet
+    container_name: unpkg-web-dev
+    command: ["bash", "-c", "yarn run watch & source .env && node server.js"]
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      REDIS_URL: "redis://redis_cache:6379"
+      NODE_ENV: "development"
     volumes:
-      - webvol:/var/lib/npm
-    deploy:
-      replicas: 3
-      restart_policy:
-        condition: on-failure
+      - .:/usr/src/app
+    ports:
+      - "8081:5000"
+    depends_on:
+      - redis_cache
 
-  cache:
+  redis_cache:
     image: redis
-    ports:
-      - "6379:6379"
-    networks:
-      - webnet
-    volumes:
-      - ./data:/data
-    deploy:
-      placement:
-        constraints: [node.role == manager]
