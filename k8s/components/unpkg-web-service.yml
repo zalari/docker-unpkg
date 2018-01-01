@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: unpkg-web-backend
+  labels:
+    app: unpkg-web-backend
+spec:
+  type: LoadBalancer
+  selector:
+    app: unpkg-web-backend
+    tier: web
+  ports:
+  - port: 80
+    targetPort: 5000
+    protocol: TCP

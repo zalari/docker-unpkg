@@ -1,0 +1,55 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: unpkg-web-backend
+  labels:
+    app: unpkg-web-backend
+    tier: web
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: unpkg-web-backend
+      tier: web
+  template:
+    metadata:
+      labels:
+        app: unpkg-web-backend
+        tier: web
+    spec:
+      containers:
+      - name: unpkg-web-backend
+        image: gcr.io/unpkg-190806/unpkg-test:latest
+        command: ["node", "server.js"]
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: GET_HOSTS_FROM
+          value: dns
+        - name: PORT
+          value: "5000"
+        - name: REDIS_URL
+          value: redis://redis-master:6379
+        - name: CLOUDFLARE_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: cflare
+              key: email
+        - name: CLOUDFLARE_KEY
+          valueFrom:
+            secretKeyRef:
+              name: cflare
+              key: key
+        ports:
+          - containerPort: 5000
+        # volumeMounts:
+        #   - name: npm-disk-cache-storage
+        #     mountPath: /var/lib/npm
+
+      # volumes:
+      #   - name: npm-disk-cache-storage
+      #     gcePersistentDisk:
+      #       pdName: unpkg-test-disk
+      #       fsType: ext4
