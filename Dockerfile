@@ -13,4 +13,3 @@ RUN yarn --pure-lockfile
 COPY . .
 
 RUN yarn build
-RUN ls node_modules
