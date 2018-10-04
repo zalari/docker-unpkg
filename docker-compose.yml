@@ -12,6 +12,7 @@ services:
 
   server:
     build: .
+    image: zalari/unpkg:latest
     command: node_modules/.bin/nodemon --ignore modules/client server.js
     env_file: .env
     environment:
