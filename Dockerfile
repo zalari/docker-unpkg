@@ -5,6 +5,7 @@ WORKDIR /app
 COPY . .
 RUN npm install
 RUN npm build
+COPY stats.json .
 
 ENV PORT 8080
 CMD ["node", "server.js"]
